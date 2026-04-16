@@ -4,6 +4,9 @@ import Timeline from "../Pages/Timeline";
 import Stats from "../Pages/Stats";
 import Homepage from "../Layouts/Homepage";
 import Details from "../Pages/Details";
+import Error from "../Pages/Error";
+import { Suspense } from "react";
+import { RotateLoader } from "react-spinners";
 
 export const router = createBrowserRouter([
   {
@@ -12,22 +15,32 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Homepage></Homepage>
+        element: <Suspense fallback={<div className="flex justify-center items-center py-60"><RotateLoader /></div>}>
+          <Homepage></Homepage>
+        </Suspense>
 
       },
 
       {
         path: "/details/:id",
-        element: <Details></Details>
+
+        element: <Suspense fallback={<div className="flex justify-center items-center py-60"><RotateLoader /></div>}>
+          <Details></Details>
+        </Suspense>
       },
       {
         path: "/stats",
-        element: <Stats></Stats>
+        element: <Suspense fallback={<div className="flex justify-center items-center py-60"><RotateLoader /></div>}>
+          <Stats></Stats>
+        </Suspense>
       },
       {
         path: "/timeline",
-        element: <Timeline></Timeline>
+        element: <Suspense fallback={<div className="flex justify-center items-center py-60"><RotateLoader /></div>}>
+          <Timeline></Timeline>
+        </Suspense>
       }
-    ]
+    ],
+    errorElement: <Error></Error>
   },
 ]);

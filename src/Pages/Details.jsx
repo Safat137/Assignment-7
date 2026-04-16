@@ -11,6 +11,7 @@ import call from "../assets/call.png"
 import video from "../assets/video.png"
 import msg from "../assets/text.png"
 import { FriendContext } from '../Context/FriendProvider'
+import { toast } from 'react-toastify'
 const friendsPromise = fetch("/friends.json")
     .then(res => res.json())
 
@@ -40,21 +41,23 @@ export default function Details() {
     const callButton = () => {
         setAudio(true)
         setType('audio')
-        isAdded([...added, {...expectedFriend, type:"audio"}])
+        isAdded([...added, { ...expectedFriend, type: "audio", id: Date.now() }])
+        toast.success('Call sent successfully')
     }
     // console.log(added);
 
     const messageButton = () => {
         setMessage(true)
         setType('message')
+        toast.success('Message sent successfully')
 
-        isAdded([...added,  {...expectedFriend, type:"message"}])
+        isAdded([...added, { ...expectedFriend, type: "message", id: Date.now() }])
     }
     const videoButton = () => {
         setVideo(true)
         setType('video')
-
-        isAdded([...added,  {...expectedFriend, type:"video"}])
+        toast.success('Video call sent successfully')
+        isAdded([...added, { ...expectedFriend, type: "video", id: Date.now() }])
     }
 
 
@@ -62,12 +65,13 @@ export default function Details() {
         <div className='container mx-auto my-10 flex flex-col md:flex-row gap-10 justify-between p-2'>
             {/* left side */}
             <div className='space-y-2 md:max-w-[500px] flex-1 '>
-                <div className='text-center bg-white p-6 border border-gray-300 rounded-2xl'>
+                <div className='text-center bg-white p-6 border border-gray-300 rounded-2xl space-y-3'>
                     <img src={picture} alt="" className='mx-auto rounded-full' />
                     <h1 className='text-2xl font-bold'>{name}</h1>
                     <p className={`w-fit mx-auto p-2 rounded-2xl text-gray-900 ${status === 'overdue' ? "bg-red-300" : status === 'on-track' ? "bg-green-400" : "bg-yellow-300"}`}> {status}</p>
-                    <p> {tags} </p>
+                    <h1 className='flex w-fit mx-auto gap-2'> {tags.map((tag, ind) => <p key={ind} className='bg-green-400 m-3 w-fit mx-auto p-2 rounded-2xl text-white'>{tag}</p>)} </h1>
                     <p>{email}</p>
+                    <p>{bio}</p>
                 </div>
                 <div className='space-y-2'>
                     <div className='text-center border rounded-2xl overflow-hidden border-gray-300'><button className='flex w-full items-center justify-center p-2 bg-white'><FaBell /> Snooze 2 weeks</button> </div>
@@ -104,15 +108,15 @@ export default function Details() {
                 <div className='bg-white p-4 rounded-2xl border border-gray-300'>
                     <h1 className='text-3xl font-bold my-2'>Quick Check-In</h1>
                     <div className='text-center gap-3 grid grid-cols-1 lg:grid-cols-3 ' >
-                        <Link onClick={() => callButton()} to="/stats" className=' p-10 bg-[#F8FAFC]  rounded-2xl border border-gray-300 btn flex-col'>
+                        <Link onClick={() => callButton()} className=' p-10 bg-[#F8FAFC]  rounded-2xl border border-gray-300 btn flex-col'>
                             <img src={call} alt="" />
                             <p>Call</p>
                         </Link>
-                        <Link onClick={() => messageButton()} to="/stats" className=' p-10 bg-[#F8FAFC]   rounded-2xl border border-gray-300 btn flex-col'>
+                        <Link onClick={() => messageButton()} className=' p-10 bg-[#F8FAFC]   rounded-2xl border border-gray-300 btn flex-col'>
                             <img src={msg} alt="" />
                             <p>Messege</p>
                         </Link>
-                        <Link onClick={() => videoButton()} to="/stats" className=' p-10 bg-[#F8FAFC]   rounded-2xl border border-gray-300 btn flex-col'>
+                        <Link onClick={() => videoButton()} className=' p-10 bg-[#F8FAFC]   rounded-2xl border border-gray-300 btn flex-col'>
                             <img src={video} alt="" />
                             <p>Video</p>
                         </Link>
